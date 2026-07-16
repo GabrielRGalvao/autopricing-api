@@ -11,4 +11,11 @@ public class VehicleDbContext : DbContext
     }
 
     public DbSet<Vehicle> Vehicles { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Vehicle>()
+            .Property(vehicle => vehicle.Price)
+            .HasPrecision(18, 2);
+    }
 }
