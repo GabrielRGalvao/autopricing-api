@@ -1,35 +1,41 @@
 using AutoPricing.Api.DTOs;
 using AutoPricing.Api.Models;
+using AutoPricing.Api.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace AutoPricing.Api.Services;
 
 public class VehicleService
 {
-    private static readonly List<Vehicle> _vehicles = new();
+    private readonly VehicleDbContext _context;
 
-    public void AddVehicle(CreateVehicleDto dto)
+    public VehicleService(VehicleDbContext context)
     {
-        var vehicle = new Vehicle
-        {
-            Id = _vehicles.Count + 1,
-            Brand = dto.Brand,
-            Model = dto.Model,
-            Year = dto.Year,
-            Mileage = dto.Mileage,
-            Price = dto.Price
-        };
-
-        _vehicles.Add(vehicle);
+        _context = context;
     }
 
+    public void AddVehicle(CreateVehicleDto dto)
+{
+    var vehicle = new Vehicle
+    {
+        Brand = dto.Brand,
+        Model = dto.Model,
+        Year = dto.Year,
+        Mileage = dto.Mileage,
+        Price = dto.Price
+    };
+
+    _context.Vehicles.Add(vehicle);
+    _context.SaveChanges();
+}
     public List<Vehicle> GetAllVehicles()
     {
-        return _vehicles;
+        return _context.Vehicles.ToList();
     }
 
     public Vehicle? GetVehicleById(int id)
     {
-        return _vehicles.FirstOrDefault(vehicle => vehicle.Id == id);
+        return _context.Vehicles.FirstOrDefault(v => v.Id == id);
     }
 
     public bool UpdateVehicle(int id, UpdateVehicleDto dto)
@@ -47,6 +53,8 @@ public class VehicleService
         vehicle.Mileage = dto.Mileage;
         vehicle.Price = dto.Price;
 
+        _context.SaveChanges();
+
         return true;
     }
 
@@ -59,7 +67,8 @@ public class VehicleService
             return false;
         }
 
-        _vehicles.Remove(vehicle);
+        _context.Vehicles.Remove(vehicle);
+        _context.SaveChanges();
 
         return true;
     }
