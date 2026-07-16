@@ -9,7 +9,7 @@ builder.Services.AddDbContext<VehicleDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers();
-builder.Services.AddSingleton<VehicleService>();
+builder.Services.AddScoped<VehicleService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
