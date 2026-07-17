@@ -1,9 +1,9 @@
 using AutoPricing.Api.Data;
 using AutoPricing.Api.DTOs;
+using AutoPricing.Api.Exceptions;
 using AutoPricing.Api.Models;
 using AutoPricing.Api.Responses;
 using Microsoft.EntityFrameworkCore;
-using AutoPricing.Api.Exceptions;
 
 namespace AutoPricing.Api.Services;
 
@@ -16,7 +16,8 @@ public class VehicleService
         _context = context;
     }
 
-    public async Task<Vehicle> AddVehicleAsync(CreateVehicleDto dto)
+    public async Task<VehicleResponseDto> AddVehicleAsync(
+        CreateVehicleDto dto)
     {
         var vehicle = new Vehicle
         {
@@ -31,10 +32,10 @@ public class VehicleService
 
         await _context.SaveChangesAsync();
 
-        return vehicle;
+        return MapToResponseDto(vehicle);
     }
 
-    public async Task<Vehicle> GetVehicleByIdAsync(int id)
+    public async Task<VehicleResponseDto> GetVehicleByIdAsync(int id)
     {
         var vehicle = await _context.Vehicles
             .AsNoTracking()
@@ -46,12 +47,12 @@ public class VehicleService
                 "Veículo não encontrado.");
         }
 
-        return vehicle;
+        return MapToResponseDto(vehicle);
     }
 
     public async Task UpdateVehicleAsync(
-    int id,
-    UpdateVehicleDto dto)
+        int id,
+        UpdateVehicleDto dto)
     {
         var vehicle = await _context.Vehicles
             .FirstOrDefaultAsync(vehicle => vehicle.Id == id);
@@ -87,7 +88,7 @@ public class VehicleService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<PagedResponse<Vehicle>> GetVehiclesAsync(
+    public async Task<PagedResponse<VehicleResponseDto>> GetVehiclesAsync(
         VehicleFilterDto filter)
     {
         var query = _context.Vehicles
@@ -173,18 +174,37 @@ public class VehicleService
         var totalPages = (int)Math.Ceiling(
             totalItems / (double)filter.PageSize);
 
-        var items = await query
+        var vehicles = await query
             .Skip((filter.Page - 1) * filter.PageSize)
             .Take(filter.PageSize)
             .ToListAsync();
 
-        return new PagedResponse<Vehicle>
+        var items = vehicles
+            .Select(MapToResponseDto)
+            .ToList();
+
+        return new PagedResponse<VehicleResponseDto>
         {
             Items = items,
             Page = filter.Page,
             PageSize = filter.PageSize,
             TotalItems = totalItems,
             TotalPages = totalPages
+        };
+    }
+
+    private static VehicleResponseDto MapToResponseDto(
+        Vehicle vehicle)
+    {
+        return new VehicleResponseDto
+        {
+            Id = vehicle.Id,
+            Brand = vehicle.Brand,
+            Model = vehicle.Model,
+            Year = vehicle.Year,
+            Mileage = vehicle.Mileage,
+            Price = vehicle.Price,
+            CreatedAt = vehicle.CreatedAt
         };
     }
 }
