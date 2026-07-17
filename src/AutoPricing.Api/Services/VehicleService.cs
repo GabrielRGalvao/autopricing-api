@@ -3,6 +3,7 @@ using AutoPricing.Api.DTOs;
 using AutoPricing.Api.Models;
 using AutoPricing.Api.Responses;
 using Microsoft.EntityFrameworkCore;
+using AutoPricing.Api.Exceptions;
 
 namespace AutoPricing.Api.Services;
 
@@ -33,23 +34,32 @@ public class VehicleService
         return vehicle;
     }
 
-    public async Task<Vehicle?> GetVehicleByIdAsync(int id)
+    public async Task<Vehicle> GetVehicleByIdAsync(int id)
     {
-        return await _context.Vehicles
+        var vehicle = await _context.Vehicles
             .AsNoTracking()
             .FirstOrDefaultAsync(vehicle => vehicle.Id == id);
+
+        if (vehicle is null)
+        {
+            throw new NotFoundException(
+                "Veículo não encontrado.");
+        }
+
+        return vehicle;
     }
 
-    public async Task<bool> UpdateVehicleAsync(
-        int id,
-        UpdateVehicleDto dto)
+    public async Task UpdateVehicleAsync(
+    int id,
+    UpdateVehicleDto dto)
     {
         var vehicle = await _context.Vehicles
             .FirstOrDefaultAsync(vehicle => vehicle.Id == id);
 
         if (vehicle is null)
         {
-            return false;
+            throw new NotFoundException(
+                "Veículo não encontrado.");
         }
 
         vehicle.Brand = dto.Brand;
@@ -59,25 +69,22 @@ public class VehicleService
         vehicle.Price = dto.Price;
 
         await _context.SaveChangesAsync();
-
-        return true;
     }
 
-    public async Task<bool> DeleteVehicleAsync(int id)
+    public async Task DeleteVehicleAsync(int id)
     {
         var vehicle = await _context.Vehicles
             .FirstOrDefaultAsync(vehicle => vehicle.Id == id);
 
         if (vehicle is null)
         {
-            return false;
+            throw new NotFoundException(
+                "Veículo não encontrado.");
         }
 
         _context.Vehicles.Remove(vehicle);
 
         await _context.SaveChangesAsync();
-
-        return true;
     }
 
     public async Task<PagedResponse<Vehicle>> GetVehiclesAsync(

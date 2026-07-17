@@ -38,37 +38,22 @@ public class VehicleController : ControllerBase
     }
 
     [HttpGet("{id}")]
+
     public async Task<IActionResult> GetById(int id)
     {
         var vehicle = await _vehicleService
             .GetVehicleByIdAsync(id);
-
-        if (vehicle is null)
-        {
-            return NotFound(new
-            {
-                message = "Veículo não encontrado."
-            });
-        }
 
         return Ok(vehicle);
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(
-        int id, 
-        UpdateVehicleDto dto)
+    int id,
+    UpdateVehicleDto dto)
     {
-        var updated = await _vehicleService
-        .UpdateVehicleAsync(id, dto);
-
-        if (!updated)
-        {
-            return NotFound(new
-            {
-                message = "Veículo não encontrado."
-            });
-        }
+        await _vehicleService
+            .UpdateVehicleAsync(id, dto);
 
         return NoContent();
     }
@@ -76,16 +61,8 @@ public class VehicleController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var deleted = await _vehicleService
+        await _vehicleService
             .DeleteVehicleAsync(id);
-
-        if (!deleted)
-        {
-            return NotFound(new
-            {
-                message = "Veículo não encontrado."
-            });
-        }
 
         return NoContent();
     }
