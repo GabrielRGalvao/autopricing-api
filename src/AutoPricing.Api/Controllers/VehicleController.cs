@@ -27,9 +27,9 @@ public class VehicleController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public IActionResult GetAll([FromQuery] VehicleFilterDto filter)
     {
-        var vehicles = _vehicleService.GetAllVehicles();
+        var vehicles = _vehicleService.GetVehicles(filter);
 
         return Ok(vehicles);
     }

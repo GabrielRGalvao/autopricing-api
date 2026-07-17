@@ -1,7 +1,6 @@
 using AutoPricing.Api.DTOs;
 using AutoPricing.Api.Models;
 using AutoPricing.Api.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace AutoPricing.Api.Services;
 
@@ -28,10 +27,54 @@ public class VehicleService
     _context.Vehicles.Add(vehicle);
     _context.SaveChanges();
 }
-    public List<Vehicle> GetAllVehicles()
-    {
-        return _context.Vehicles.ToList();
-    }
+    public List<Vehicle> GetVehicles(VehicleFilterDto filter)
+{
+    var query = _context.Vehicles.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(filter.Brand))
+        {
+            query = query.Where(vehicle =>
+                vehicle.Brand.Contains(filter.Brand));
+        }
+
+        if (!string.IsNullOrWhiteSpace(filter.Model))
+        {
+            query = query.Where(vehicle =>
+                vehicle.Model.Contains(filter.Model));
+        }
+
+        if (filter.Year.HasValue)
+        {
+            query = query.Where(vehicle =>
+                vehicle.Year == filter.Year.Value);
+        }
+
+        if (filter.MinPrice.HasValue)
+        {
+            query = query.Where(vehicle =>
+                vehicle.Price >= filter.MinPrice.Value);
+        }
+
+        if (filter.MaxPrice.HasValue)
+        {
+            query = query.Where(vehicle =>
+                vehicle.Price <= filter.MaxPrice.Value);
+        }
+
+        if (filter.MinMileage.HasValue)
+        {
+            query = query.Where(vehicle =>
+                vehicle.Mileage >= filter.MinMileage.Value);
+        }
+
+        if (filter.MaxMileage.HasValue)
+        {
+            query = query.Where(vehicle =>
+                vehicle.Mileage <= filter.MaxMileage.Value);
+        }
+
+            return query.ToList();
+}
 
     public Vehicle? GetVehicleById(int id)
     {

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoPricing.Api.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using AutoPricing.Api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +31,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.MapControllers();
 
