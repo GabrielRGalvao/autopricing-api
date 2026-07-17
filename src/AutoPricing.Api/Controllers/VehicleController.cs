@@ -11,9 +11,9 @@ public class VehicleController : ControllerBase
     private readonly VehicleService _vehicleService;
 
     public VehicleController(VehicleService vehicleService)
-{
-    _vehicleService = vehicleService;
-}
+    {
+        _vehicleService = vehicleService;
+    }
 
     [HttpPost]
     public IActionResult Create(CreateVehicleDto dto)

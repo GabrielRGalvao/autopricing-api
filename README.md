@@ -2,7 +2,7 @@
 
 API REST desenvolvida em ASP.NET Core 8 para gerenciamento e sugestão de preços de veículos usados.
 
-Este projeto foi no desenvolvimento Back-end com C#, Entity Framework Core, SQL Server e Docker, simulando um cenário próximo ao de aplicações utilizadas no mercado.
+Projeto Back-end desenvolvido em C#, Entity Framework Core, SQL Server e Docker, priorizando aplicações utilizadas no mercado.
 
 ## Tecnologias
 

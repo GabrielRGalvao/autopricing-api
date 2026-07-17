@@ -56,5 +56,27 @@ public class VehicleFilterDtoValidator : AbstractValidator<VehicleFilterDto>
                 filter.MinMileage <= filter.MaxMileage)
             .WithMessage(
                 "A quilometragem mínima não pode ser maior que a quilometragem máxima.");
+
+        RuleFor(x => x.SortBy)
+            .Must(sortBy =>
+            string.IsNullOrWhiteSpace(sortBy) ||
+            new[]
+            {
+                "brand",
+                "model",
+                "year",
+                "price",
+                "mileage"
+            }.Contains(sortBy.ToLower()))
+             .WithMessage(
+                "O campo de ordenação deve ser brand, model, year, price ou mileage.");
+
+        RuleFor(x => x.Page)
+            .GreaterThanOrEqualTo(1)
+            .WithMessage("A página deve ser maior ou igual a 1.");
+
+        RuleFor(x => x.PageSize)
+            .InclusiveBetween(1, 50)
+            .WithMessage("A quantidade de itens por página deve estar entre 1 e 50.");
     }
 }
