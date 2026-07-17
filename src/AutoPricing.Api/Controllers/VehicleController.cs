@@ -16,34 +16,38 @@ public class VehicleController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create(CreateVehicleDto dto)
+    public async Task<IActionResult> Create(CreateVehicleDto dto)
     {
-        _vehicleService.AddVehicle(dto);
+        var createdVehicle = await _vehicleService
+        .AddVehicleAsync(dto);
 
-        return Ok(new
-        {
-            message = "Veículo criado com sucesso."
-        });
+        return CreatedAtAction(
+            nameof(GetById),
+            new { id = createdVehicle.Id },
+            createdVehicle);
     }
 
     [HttpGet]
-    public IActionResult GetAll([FromQuery] VehicleFilterDto filter)
+    public async Task<IActionResult> GetAll(
+        [FromQuery] VehicleFilterDto filter)
     {
-        var vehicles = _vehicleService.GetVehicles(filter);
+        var vehicles = await _vehicleService
+            .GetVehiclesAsync(filter);
 
         return Ok(vehicles);
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetById(int id)
+    public async Task<IActionResult> GetById(int id)
     {
-        var vehicle = _vehicleService.GetVehicleById(id);
+        var vehicle = await _vehicleService
+            .GetVehicleByIdAsync(id);
 
         if (vehicle is null)
         {
             return NotFound(new
             {
-                message = $"Veículo com ID {id} não encontrado."
+                message = "Veículo não encontrado."
             });
         }
 
@@ -51,40 +55,38 @@ public class VehicleController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public IActionResult Update(int id, UpdateVehicleDto dto)
+    public async Task<IActionResult> Update(
+        int id, 
+        UpdateVehicleDto dto)
     {
-        var updated = _vehicleService.UpdateVehicle(id, dto);
+        var updated = await _vehicleService
+        .UpdateVehicleAsync(id, dto);
 
         if (!updated)
         {
             return NotFound(new
             {
-                message = $"Veículo com ID {id} não encontrado."
+                message = "Veículo não encontrado."
             });
         }
 
-        return Ok(new
-        {
-            message = "Veículo atualizado com sucesso."
-        });
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        var deleted = _vehicleService.DeleteVehicle(id);
+        var deleted = await _vehicleService
+            .DeleteVehicleAsync(id);
 
         if (!deleted)
         {
             return NotFound(new
             {
-                message = $"Veículo com ID {id} não encontrado."
+                message = "Veículo não encontrado."
             });
         }
 
-        return Ok(new
-        {
-            message = "Veículo removido com sucesso."
-        });
+        return NoContent();
     }
 }
