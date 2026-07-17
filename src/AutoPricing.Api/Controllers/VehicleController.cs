@@ -22,7 +22,7 @@ public class VehicleController : ControllerBase
 
         return Ok(new
         {
-            message = "Vehicle created successfully."
+            message = "Veículo criado com sucesso."
         });
     }
 
@@ -43,7 +43,7 @@ public class VehicleController : ControllerBase
         {
             return NotFound(new
             {
-                message = $"Vehicle with id {id} not found."
+                message = $"Veículo com ID {id} não encontrado."
             });
         }
 
@@ -59,13 +59,13 @@ public class VehicleController : ControllerBase
         {
             return NotFound(new
             {
-                message = $"Vehicle with id {id} not found."
+                message = "Veículo com ID {id} não encontrado."
             });
         }
 
         return Ok(new
         {
-            message = "Vehicle updated successfully."
+            message = "Veículo atualizado com sucesso."
         });
     }
 
@@ -78,13 +78,13 @@ public class VehicleController : ControllerBase
         {
             return NotFound(new
             {
-                message = $"Vehicle with id {id} not found."
+                message = "Veículo com ID {id} não encontrado."
             });
         }
 
         return Ok(new
         {
-            message = "Vehicle deleted successfully."
+            message = "Veículo removido com sucesso."
         });
     }
 }

@@ -1,6 +1,9 @@
 using AutoPricing.Api.Data;
 using AutoPricing.Api.Services;
 using Microsoft.EntityFrameworkCore;
+using AutoPricing.Api.Validators;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +12,13 @@ builder.Services.AddDbContext<VehicleDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers();
+
+builder.Services.AddFluentValidationAutoValidation();
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreateVehicleDtoValidator>();
+
 builder.Services.AddScoped<VehicleService>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
