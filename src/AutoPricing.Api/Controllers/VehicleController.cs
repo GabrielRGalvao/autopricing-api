@@ -16,7 +16,7 @@ public class VehicleController : ControllerBase
 }
 
     [HttpPost]
-    public IActionResult CreateVehicle(CreateVehicleDto dto)
+    public IActionResult Create(CreateVehicleDto dto)
     {
         _vehicleService.AddVehicle(dto);
 
@@ -27,7 +27,7 @@ public class VehicleController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetVehicles()
+    public IActionResult GetAll()
     {
         var vehicles = _vehicleService.GetAllVehicles();
 
@@ -35,7 +35,7 @@ public class VehicleController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetVehicleById(int id)
+    public IActionResult GetById(int id)
     {
         var vehicle = _vehicleService.GetVehicleById(id);
 
@@ -51,7 +51,7 @@ public class VehicleController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public IActionResult UpdateVehicle(int id, UpdateVehicleDto dto)
+    public IActionResult Update(int id, UpdateVehicleDto dto)
     {
         var updated = _vehicleService.UpdateVehicle(id, dto);
 
@@ -59,7 +59,7 @@ public class VehicleController : ControllerBase
         {
             return NotFound(new
             {
-                message = "Veículo com ID {id} não encontrado."
+                message = $"Veículo com ID {id} não encontrado."
             });
         }
 
@@ -70,7 +70,7 @@ public class VehicleController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public IActionResult DeleteVehicle(int id)
+    public IActionResult Delete(int id)
     {
         var deleted = _vehicleService.DeleteVehicle(id);
 
@@ -78,7 +78,7 @@ public class VehicleController : ControllerBase
         {
             return NotFound(new
             {
-                message = "Veículo com ID {id} não encontrado."
+                message = $"Veículo com ID {id} não encontrado."
             });
         }
 
