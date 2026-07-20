@@ -25,19 +25,17 @@ public class ExceptionMiddleware
         }
         catch (NotFoundException exception)
         {
-            context.Response.StatusCode =
-                (int)HttpStatusCode.NotFound;
-
-            context.Response.ContentType =
-                "application/json";
-
-            var response = new
-            {
-                message = exception.Message
-            };
-
-            await context.Response.WriteAsync(
-                JsonSerializer.Serialize(response));
+            await WriteResponseAsync(
+                context,
+                HttpStatusCode.NotFound,
+                exception.Message);
+        }
+        catch (InvalidOperationException exception)
+        {
+            await WriteResponseAsync(
+                context,
+                HttpStatusCode.Conflict,
+                exception.Message);
         }
         catch (Exception exception)
         {
@@ -45,19 +43,27 @@ public class ExceptionMiddleware
                 exception,
                 "Ocorreu um erro inesperado.");
 
-            context.Response.StatusCode =
-                (int)HttpStatusCode.InternalServerError;
-
-            context.Response.ContentType =
-                "application/json";
-
-            var response = new
-            {
-                message = "Ocorreu um erro interno no servidor."
-            };
-
-            await context.Response.WriteAsync(
-                JsonSerializer.Serialize(response));
+            await WriteResponseAsync(
+                context,
+                HttpStatusCode.InternalServerError,
+                "Ocorreu um erro interno no servidor.");
         }
+    }
+
+    private static async Task WriteResponseAsync(
+        HttpContext context,
+        HttpStatusCode statusCode,
+        string message)
+    {
+        context.Response.StatusCode = (int)statusCode;
+        context.Response.ContentType = "application/json";
+
+        var response = new
+        {
+            message
+        };
+
+        await context.Response.WriteAsync(
+            JsonSerializer.Serialize(response));
     }
 }
