@@ -2,6 +2,7 @@ using AutoPricing.Api.Data;
 using AutoPricing.Api.DTOs;
 using AutoPricing.Api.Models;
 using Microsoft.EntityFrameworkCore;
+using AutoPricing.Api.Exceptions;
 
 namespace AutoPricing.Api.Services;
 
@@ -25,7 +26,7 @@ public class AuthService
 
         if (emailAlreadyExists)
         {
-            throw new InvalidOperationException(
+            throw new ConflictException(
                 "Já existe um usuário cadastrado com este e-mail.");
         }
 

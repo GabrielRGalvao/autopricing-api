@@ -30,7 +30,7 @@ public class ExceptionMiddleware
                 HttpStatusCode.NotFound,
                 exception.Message);
         }
-        catch (InvalidOperationException exception)
+        catch (ConflictException exception)
         {
             await WriteResponseAsync(
                 context,
