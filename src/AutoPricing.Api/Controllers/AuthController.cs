@@ -28,4 +28,16 @@ public class AuthController : ControllerBase
                 message = "Usuário cadastrado com sucesso."
             });
     }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(LoginDto dto)
+    {
+        var token = await _authService.LoginAsync(dto);
+
+        return Ok(new
+        {
+            token,
+            message = "Login realizado com sucesso."
+        });
+    }
 }

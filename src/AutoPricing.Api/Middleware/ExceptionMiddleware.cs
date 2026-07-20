@@ -37,6 +37,14 @@ public class ExceptionMiddleware
                 HttpStatusCode.Conflict,
                 exception.Message);
         }
+        catch (UnauthorizedAccessException exception)
+        {
+            await WriteResponseAsync(
+                context,
+                HttpStatusCode.Unauthorized,
+                exception.Message);
+        }
+
         catch (Exception exception)
         {
             _logger.LogError(

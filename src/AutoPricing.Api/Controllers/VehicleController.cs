@@ -1,6 +1,7 @@
 using AutoPricing.Api.DTOs;
 using AutoPricing.Api.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AutoPricing.Api.Controllers;
 
@@ -16,6 +17,7 @@ public class VehicleController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Create(CreateVehicleDto dto)
     {
         var createdVehicle = await _vehicleService
@@ -48,6 +50,7 @@ public class VehicleController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize]
     public async Task<IActionResult> Update(
     int id,
     UpdateVehicleDto dto)
@@ -59,6 +62,7 @@ public class VehicleController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize]
     public async Task<IActionResult> Delete(int id)
     {
         await _vehicleService
