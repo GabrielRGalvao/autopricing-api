@@ -18,7 +18,11 @@ public class VehicleController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> Create(CreateVehicleDto dto)
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> Create(
+    [FromBody] CreateVehicleDto dto)
     {
         var createdVehicle = await _vehicleService
         .AddVehicleAsync(dto);
@@ -30,6 +34,7 @@ public class VehicleController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll(
         [FromQuery] VehicleFilterDto filter)
     {
@@ -40,7 +45,8 @@ public class VehicleController : ControllerBase
     }
 
     [HttpGet("{id}")]
-
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(int id)
     {
         var vehicle = await _vehicleService
@@ -51,9 +57,13 @@ public class VehicleController : ControllerBase
 
     [HttpPut("{id}")]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(
     int id,
-    UpdateVehicleDto dto)
+    [FromBody] UpdateVehicleDto dto)
     {
         await _vehicleService
             .UpdateVehicleAsync(id, dto);
@@ -63,6 +73,9 @@ public class VehicleController : ControllerBase
 
     [HttpDelete("{id}")]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id)
     {
         await _vehicleService
