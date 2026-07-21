@@ -1,30 +1,51 @@
 # AutoPricing API
 
-API REST desenvolvida em ASP.NET Core 8 para gerenciamento e sugestão de preços de veículos usados.
+API REST desenvolvida em ASP.NET Core 8 para gerenciamento de veículos usados.
 
-Projeto Back-end desenvolvido em C#, Entity Framework Core, SQL Server e Docker, priorizando aplicações utilizadas no mercado.
+O projeto foi desenvolvido com foco em boas práticas no desenvolvimento Back-end, utilizando arquitetura em camadas, autenticação JWT, Entity Framework Core e SQL Server.
 
-## Tecnologias
+---
+
+## Tecnologias utilizadas
 
 - ASP.NET Core 8
 - C#
 - Entity Framework Core
 - SQL Server
+- JWT Authentication
+- FluentValidation
+- Swagger / OpenAPI
 - Docker
-- Swagger
 - Git
+
+---
 
 ## Funcionalidades
 
-- ✅ Cadastro de veículos
-- ✅ Listagem de veículos
-- ✅ Busca por ID
-- ✅ Atualização de veículos
-- ✅ Remoção de veículos
-- ✅ Persistência de dados com SQL Server
-- ✅ Entity Framework Core + Migrations
+### Veículos
 
-## Executando o projeto
+- Cadastro de veículos
+- Listagem de veículos
+- Busca por ID
+- Atualização
+- Remoção
+
+### Recursos da API
+
+- Autenticação JWT
+- Cadastro e login de usuários
+- Endpoints protegidos
+- Validação de dados com FluentValidation
+- Middleware global para tratamento de exceções
+- Paginação
+- Filtros
+- Ordenação dinâmica
+- Persistência com SQL Server
+- Migrations com Entity Framework Core
+
+---
+
+## Como executar
 
 ```bash
 docker compose up -d
@@ -42,15 +63,34 @@ A documentação da API estará disponível em:
 http://localhost:5276/swagger
 ```
 
-## Roadmap
+---
 
-Próximas funcionalidades:
+## Arquitetura
 
-- Validação de dados
-- Testes unitários
-- Paginação
-- Filtros
-- Ordenação
-- Sugestão automática de preço de veículos
+O projeto está organizado em camadas para manter a separação de responsabilidades:
+
+```
+Controllers
+Services
+DTOs
+Models
+Validators
+Middleware
+Exceptions
+Data
+Configurations
+```
 
 ---
+
+## Tecnologias aplicadas
+
+- Dependency Injection
+- Entity Framework Core
+- JWT Authentication
+- FluentValidation
+- Middleware
+- REST API
+- SQL Server
+- Docker
+- Swagger
